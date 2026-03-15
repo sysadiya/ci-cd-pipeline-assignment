@@ -1,0 +1,22 @@
+name: CI Pipeline
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: mvn clean test
+      - run: mvn package
+      - run: >
+          mvn sonar:sonar
+          -Dsonar.projectKey=customer-order-api
+          -Dsonar.host.url=http://localhost:9000
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - run: docker build -t customer-order-api .
+
