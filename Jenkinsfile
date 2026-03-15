@@ -9,7 +9,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/sysadiya/customer-order-api.git'
+                git 'https://github.com/sysadiya/ci-cd-pipeline-assignment.git'
             }
         }
 
