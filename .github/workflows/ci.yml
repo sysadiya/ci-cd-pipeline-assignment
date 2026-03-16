@@ -2,40 +2,33 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ["**"]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
     steps:
-      - name: Checkout source
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
-          cache: maven
+          java-version: 17
 
-      - name: Run tests
-        run: mvn --batch-mode clean test
+      - name: Build and Test
+        run: mvn clean verify
 
-      - name: Package artifact
-        run: mvn --batch-mode package
+      - name: SonarCloud Analysis
+        run: |
+          mvn sonar:sonar \
+          -Dsonar.projectKey=sysadiya_ci-cd-pipeline-assignment \
+          -Dsonar.organization=sysadiya \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
-      - name: SonarQube analysis
-        if: ${{ env.SONAR_TOKEN != '' && env.SONAR_HOST_URL != '' }}
-        run: >-
-          mvn --batch-mode org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -Dsonar.projectKey=customer-order-api
-          -Dsonar.host.url=${SONAR_HOST_URL}
-          -Dsonar.token=${SONAR_TOKEN}
-
-      - name: Build Docker image
+      - name: Build Docker Image
         run: docker build -t customer-order-api .
-
