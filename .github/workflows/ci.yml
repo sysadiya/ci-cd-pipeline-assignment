@@ -38,3 +38,6 @@ jobs:
 
       - name: Run Ansible Deployment
         run: ansible-playbook -i ansible/inventory ansible/deploy.yml
+
+      - name: Show Running Containers
+        run: docker ps
