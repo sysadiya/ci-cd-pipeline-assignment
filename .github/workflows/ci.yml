@@ -32,3 +32,9 @@ jobs:
 
       - name: Build Docker Image
         run: docker build -t customer-order-api .
+
+      - name: Install Ansible
+        run: sudo apt install ansible -y
+
+      - name: Run Ansible Deployment
+        run: ansible-playbook -i ansible/inventory ansible/deploy.yml

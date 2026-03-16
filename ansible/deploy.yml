@@ -1,0 +1,19 @@
+- name: Deploy customer-order-api container
+  hosts: local
+  become: true
+
+  tasks:
+    - name: Stop existing container
+      command: docker stop customer-order-api
+      ignore_errors: yes
+
+    - name: Remove old container
+      command: docker rm customer-order-api
+      ignore_errors: yes
+
+    - name: Build Docker image
+      command: docker build -t customer-order-api .
+
+    - name: Run Docker container
+      command: docker run -d -p 8083:8080 --name customer-order-api customer-order-api
+
