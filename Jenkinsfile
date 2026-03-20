@@ -9,7 +9,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/sysadiya/ci-cd-pipeline-assignment.git'
+                git 'https://github.com/sysadiya/ci-cd-pipeline-assignment-using-jenkins.git'
             }
         }
 
