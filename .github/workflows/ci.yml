@@ -26,7 +26,7 @@ jobs:
       - name: Build and Test
         run: mvn clean verify
 
-      # 4️⃣ SonarCloud Analysis
+      # 4️⃣ SonarCloud Analysis .
       - name: SonarCloud Analysis
         run: |
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \
@@ -37,7 +37,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # 5️⃣ Build Docker Image
+      # 5️⃣ Build the Docker Image
       - name: Build Docker Image
         run: docker build -t customer-order-api .
 
