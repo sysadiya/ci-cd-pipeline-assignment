@@ -62,12 +62,14 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/customer-order-api:latest
 
-      # 9️⃣ Install Ansible + Python dependencies
+      # 9️⃣ Install Ansible + Python dependencies (FIXED)
       - name: Install Ansible and Dependencies
         run: |
           sudo apt update
           sudo apt install -y ansible python3-pip
-          pip3 install requests docker
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install requests docker
 
       # 🔟 Install Ansible Docker Collection
       - name: Install Ansible Docker Collection
