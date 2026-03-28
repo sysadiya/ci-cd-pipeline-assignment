@@ -1,17 +1,23 @@
-- name: Deploy on Localhost
+- name: Deploy from Docker Hub
   hosts: localhost
   connection: local
   become: true
 
+  vars:
+    image_name: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}/customer-order-api:latest"
+    container_name: customer-order-api
+
   tasks:
+    - name: Pull latest image from Docker Hub
+      command: docker pull {{ image_name }}
+
     - name: Stop existing container (if running)
-      command: docker stop customer-order-api
+      command: docker stop {{ container_name }}
       ignore_errors: yes
 
     - name: Remove existing container
-      command: docker rm customer-order-api
+      command: docker rm {{ container_name }}
       ignore_errors: yes
 
     - name: Run new container
-      command: docker run -d -p 8080:8080 --name customer-order-api customer-order-api
-
+      command: docker run -d -p 8080:8080 --name {{ container_name }} {{ image_name }}
