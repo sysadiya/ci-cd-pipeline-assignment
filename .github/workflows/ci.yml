@@ -26,7 +26,7 @@ jobs:
       - name: Build and Test
         run: mvn clean verify
 
-      # 4️⃣ SonarCloud Analysis .
+      # 4️⃣ SonarCloud Analysis
       - name: SonarCloud Analysis
         run: |
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \
@@ -37,7 +37,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # 5️⃣ Build the Docker Image
+      # 5️⃣ Build Docker Image
       - name: Build Docker Image
         run: docker build -t customer-order-api .
 
@@ -49,6 +49,7 @@ jobs:
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
+      # 7️⃣ Tag Docker Image
       - name: Tag Docker Image
         run: |
           docker tag customer-order-api ${{ secrets.DOCKERHUB_USERNAME }}/customer-order-api:latest
@@ -57,15 +58,16 @@ jobs:
       - name: Verify Tagged Image
         run: docker images
 
-      # 8️⃣ Push to Docker Hub
+      # 8️⃣ Push Docker Image
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/customer-order-api:latest
 
-      # 9️⃣ Install Ansible
-      - name: Install Ansible
+      # 9️⃣ Install Ansible + Python dependencies
+      - name: Install Ansible and Dependencies
         run: |
           sudo apt update
-          sudo apt install -y ansible
+          sudo apt install -y ansible python3-pip
+          pip3 install requests docker
 
       # 🔟 Install Ansible Docker Collection
       - name: Install Ansible Docker Collection
