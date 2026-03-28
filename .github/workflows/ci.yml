@@ -22,7 +22,7 @@ jobs:
           java-version: 17
           cache: maven
 
-      # 3️⃣ Build & Test
+      # 3️⃣ Build and Test
       - name: Build and Test
         run: mvn clean verify
 
