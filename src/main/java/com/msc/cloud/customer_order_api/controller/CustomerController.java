@@ -90,7 +90,8 @@ public class CustomerController {
                 .collect(Collectors.toList());
     }
 
-    // ✅ CREATE order for a customer (FULL MARKS requirement)
+    // ✅ CREATE order for a customer
+
     @PostMapping("/{id}/orders")
     public ResponseEntity<OrderDTO> createOrderForCustomer(
             @PathVariable Long id,
