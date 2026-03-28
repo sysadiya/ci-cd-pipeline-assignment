@@ -1,21 +1,17 @@
-- name: Deploy customer-order-api container
-  hosts: local
-  become: true
+- name: Deploy on Localhost
+  hosts: localhost
   connection: local
+  become: true
 
   tasks:
-
-    - name: Stop existing container
+    - name: Stop existing container (if running)
       command: docker stop customer-order-api
       ignore_errors: yes
 
-    - name: Remove old container
+    - name: Remove existing container
       command: docker rm customer-order-api
       ignore_errors: yes
 
-    - name: Build Docker image
-      command: docker build -t customer-order-api {{ playbook_dir }}/..
-
-    - name: Run Docker container
-      command: docker run -d -p 8083:8080 --name customer-order-api customer-order-api
+    - name: Run new container
+      command: docker run -d -p 8080:8080 --name customer-order-api customer-order-api
 
