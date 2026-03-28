@@ -9,15 +9,26 @@
 
   tasks:
     - name: Pull latest image from Docker Hub
-      command: docker pull {{ image_name }}
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        source: pull
 
     - name: Stop existing container (if running)
-      command: docker stop {{ container_name }}
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        state: stopped
       ignore_errors: yes
 
     - name: Remove existing container
-      command: docker rm {{ container_name }}
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        state: absent
       ignore_errors: yes
 
     - name: Run new container
-      command: docker run -d -p 8080:8080 --name {{ container_name }} {{ image_name }}
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}"
+        state: started
+        ports:
+          - "8080:8080"
