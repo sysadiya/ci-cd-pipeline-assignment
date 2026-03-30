@@ -4,7 +4,7 @@
   become: true
 
   vars:
-    ansible_python_interpreter: /usr/bin/python3   # ✅ FIX ADDED HERE
+    ansible_python_interpreter: /usr/bin/python3   #
     image_name: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}/customer-order-api:latest"
     container_name: customer-order-api
 
