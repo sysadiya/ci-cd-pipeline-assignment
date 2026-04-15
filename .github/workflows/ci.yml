@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout Code
+      # Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Java
+      # Setup Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -22,18 +22,18 @@ jobs:
           java-version: 17
           cache: maven
 
-      # 3️⃣ Build and Test
+      # Build and Test
       - name: Build and Test
         run: mvn clean verify
 
-      # ✅ Upload Build Artifact
+      #Upload Build Artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: customer-order-api-jar
           path: target/*.jar
 
-      # 4️⃣ SonarCloud Analysis
+      # SonarCloud Analysis
       - name: SonarCloud Analysis
         run: |
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \
@@ -44,32 +44,32 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # 5️⃣ Build Docker Image
+      # Build Docker Image
       - name: Build Docker Image
         run: docker build -t customer-order-api .
 
-      # 🔍 Debug Docker Image
+      # Debug Docker Image
       - name: Verify Docker Image
         run: docker images
 
-      # 6️⃣ Login to Docker Hub
+      # Login to Docker Hub
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      # 7️⃣ Tag Docker Image
+      # Tag Docker Image
       - name: Tag Docker Image
         run: |
           docker tag customer-order-api ${{ secrets.DOCKERHUB_USERNAME }}/customer-order-api:latest
 
-      # 🔍 Debug Tagged Images
+      #Debug Tagged Images
       - name: Verify Tagged Image
         run: docker images
 
-      # 8️⃣ Push Docker Image
+      # Push Docker Image
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/customer-order-api:latest
 
-      # 9️⃣ Install Ansible + Python dependencies
+      # Install Ansible + Python dependencies
       - name: Install Ansible and Dependencies
         run: |
           sudo apt update
@@ -78,11 +78,11 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install requests docker
 
-      # 🔟 Install Ansible Docker Collection
+      #Install Ansible Docker Collection
       - name: Install Ansible Docker Collection
         run: ansible-galaxy collection install community.docker
 
-      # 🚀 Deploy using Ansible (LOCALHOST)
+      #Deploy using Ansible (LOCALHOST)
       - name: Deploy Locally using Ansible
         run: ansible-playbook ansible/deploy.yml
         env:
