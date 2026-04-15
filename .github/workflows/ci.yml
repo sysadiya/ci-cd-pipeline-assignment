@@ -26,6 +26,13 @@ jobs:
       - name: Build and Test
         run: mvn clean verify
 
+      # ✅ Upload Build Artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: customer-order-api-jar
+          path: target/*.jar
+
       # 4️⃣ SonarCloud Analysis
       - name: SonarCloud Analysis
         run: |
@@ -62,7 +69,7 @@ jobs:
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/customer-order-api:latest
 
-      # 9️⃣ Install Ansible + Python dependencies (FIXED)
+      # 9️⃣ Install Ansible + Python dependencies
       - name: Install Ansible and Dependencies
         run: |
           sudo apt update
